@@ -3,7 +3,7 @@ import { HttpClient} from '@angular/common/http';
 import { Customer } from './customer';
  
 @Injectable()
-export class DataService {
+export class CustomersService {
  
     private url = "/api/customers";
  
