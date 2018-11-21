@@ -10,6 +10,9 @@ import { CustomersComponent } from './customers/customers.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
+//bottstrap:
+import { AlertModule } from 'ngx-bootstrap';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,6 +20,7 @@ import { HttpModule } from '@angular/http';
     CustomersComponent
   ],
   imports: [
+    AlertModule.forRoot(),
     HttpClientModule,
     HttpModule,
     BrowserModule,

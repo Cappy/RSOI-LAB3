@@ -15,9 +15,9 @@
     <tbody>
         <tr *ngFor="let c of customers">
             <ng-template [ngIf]="customer?.customerId != c.customerId" [ngIfElse]="edit">
-                <td>{{c.name}}</td>
-                <td>{{c.surname}}</td>
-                <td>{{c.phoneNumber}}</td>
+                <td>{{c?.name}}</td>
+                <td>{{c?.surname}}</td>
+                <td>{{c?.phoneNumber}}</td>
                 <td>
 					
                     <button class="btn btn-warning btn-sm btn-space" (click)="editCustomer(c)">Изменить</button>
