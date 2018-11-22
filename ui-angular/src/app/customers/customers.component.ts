@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CustomersService } from './customers.service';
 import { Customer } from './customer';
 import { HttpResponse } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-customers',
@@ -13,18 +14,45 @@ export class CustomersComponent implements OnInit {
 
   customer: Customer = new Customer();   // изменяемый клиент
   customers: Customer[];                // массив клиентов
+  customersCount: number;
   tableMode: boolean = true;          // табличный режим
+  page: number = 1;
+  size: number = 10;
   
-  constructor(private customersService: CustomersService) { }
+  constructor(private customersService: CustomersService,
+  private route: ActivatedRoute, private router: Router) 
+  {
+	 this.route.queryParams.subscribe(params => {
+	if (params['page'] != null && params['page']>0) {
+		this.page = params['page'];
+	}
+	if (params['size'] != null && params['size']>0){
+    this.size = params['size'];
+	}
+    });
+	
+  }
 
 ngOnInit() {
-        this.loadCustomers();    // загрузка данных при старте компонента  
+        this.loadCustomers();    // загрузка данных при старте компонента
+		this.getCustomersCount();		
     }
     // получаем данные через сервис
     loadCustomers() {
-        this.customersService.getCustomers()
+			
+        this.customersService.getCustomers(this.page,this.size)
             .subscribe((data: Customer[]) => this.customers = data);
+		if (this.page > 0 && this.size > 0)
+		{
+		this.router.navigate(['/customers'], { queryParams: { page: this.page, size: this.size } });
+		}
     }
+	
+	getCustomersCount() {
+        this.customersService.getAllCustomers()
+            .subscribe((data: Customer[]) => this.customersCount = data.length);
+    }
+	
     // сохранение данных
     save() {
         if (this.customer.customerId == null) {
@@ -49,6 +77,7 @@ ngOnInit() {
         this.customer = new Customer();
         this.tableMode = true;
     }
+	
     delete(c: Customer) {
         this.customersService.deleteCustomer(c.customerId)
             .subscribe(data => this.loadCustomers());

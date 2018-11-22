@@ -6,21 +6,27 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { CustomersComponent } from './customers/customers.component';
+import { HomeComponent } from './home/home.component';
+import { RoomsComponent } from './rooms/rooms.component';
+import { BookingsComponent } from './bookings/bookings.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
-//bottstrap:
-import { AlertModule } from 'ngx-bootstrap';
+
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
-    CustomersComponent
+    CustomersComponent,
+    HomeComponent,
+    RoomsComponent,
+    BookingsComponent
   ],
   imports: [
-    AlertModule.forRoot(),
+  	NgxPaginationModule,
     HttpClientModule,
     HttpModule,
     BrowserModule,
