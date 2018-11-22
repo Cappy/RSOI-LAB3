@@ -34,8 +34,8 @@ ngOnInit() {
                     console.log(data);
                     this.customers.push(data.body);
                 });
-            //this.customersService.createCustomer(this.customer)
-			//	.subscribe((data: Customer) => this.customers.push(data));
+            // this.customersservice.createcustomer(this.customer)
+				// .subscribe((data: customer) => this.customers.push(data));
         } else {
             this.customersService.updateCustomer(this.customer)
                 .subscribe(data => this.loadCustomers());
