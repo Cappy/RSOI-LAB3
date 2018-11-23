@@ -3,6 +3,7 @@ import { CustomersService } from './customers.service';
 import { Customer } from './customer';
 import { HttpResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-customers',
@@ -18,28 +19,33 @@ export class CustomersComponent implements OnInit {
   tableMode: boolean = true;          // табличный режим
   page: number = 1;
   size: number = 10;
+
   
   constructor(private customersService: CustomersService,
-  private route: ActivatedRoute, private router: Router) 
+  private route: ActivatedRoute, private router: Router,
+  private formBuilder: FormBuilder) 
   {
-	 this.route.queryParams.subscribe(params => {
-	if (params['page'] != null && params['page']>0) {
-		this.page = params['page'];
-	}
-	if (params['size'] != null && params['size']>0){
-    this.size = params['size'];
-	}
+	this.route.queryParams.subscribe(params => {
+		if (params['page']>0) {
+			this.page = params['page'];
+		}
+		if (params['size']>0){
+			this.size = params['size'];
+		}
     });
 	
   }
 
 ngOnInit() {
+		
         this.loadCustomers();    // загрузка данных при старте компонента
-		this.getCustomersCount();		
+		//this.getCustomersCount();
+		
     }
+
     // получаем данные через сервис
-    loadCustomers() {
-			
+    loadCustomers() {	
+		this.getCustomersCount();
         this.customersService.getCustomers(this.page,this.size)
             .subscribe((data: Customer[]) => this.customers = data);
 		if (this.page > 0 && this.size > 0)
@@ -60,7 +66,8 @@ ngOnInit() {
 			this.customersService.createCustomer(this.customer)
                 .subscribe((data: HttpResponse<Customer>) => {
                     console.log(data);
-                    this.customers.push(data.body);
+					this.loadCustomers();
+                    //this.customers.push(data.body);
                 });
             // this.customersservice.createcustomer(this.customer)
 				// .subscribe((data: customer) => this.customers.push(data));
@@ -68,22 +75,28 @@ ngOnInit() {
             this.customersService.updateCustomer(this.customer)
                 .subscribe(data => this.loadCustomers());
         }
-        this.cancel();
-    }
+		this.cancel();
+	}
+ 
     editCustomer(c: Customer) {
         this.customer = c;
     }
+	
     cancel() {
+		this.loadCustomers();
         this.customer = new Customer();
         this.tableMode = true;
     }
 	
     delete(c: Customer) {
-        this.customersService.deleteCustomer(c.customerId)
+	  
+	  this.customersService.deleteCustomer(c.customerId)
             .subscribe(data => this.loadCustomers());
+	this.cancel();
     }
+	
     add() {
-        this.cancel();
         this.tableMode = false;
     }
+	
 }

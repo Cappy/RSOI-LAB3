@@ -14,7 +14,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
 
-import {NgxPaginationModule} from 'ngx-pagination';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -26,6 +29,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     BookingsComponent
   ],
   imports: [
+    ReactiveFormsModule,
+    SweetAlert2Module.forRoot(),
   	NgxPaginationModule,
     HttpClientModule,
     HttpModule,
@@ -33,7 +38,8 @@ import {NgxPaginationModule} from 'ngx-pagination';
     AppRoutingModule,
 	FormsModule
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
