@@ -135,6 +135,7 @@ ngOnInit() {
     }
 	
     add() {
+		this.bookinginfo = false;
 		this.roomsService.getAllRooms()
             .subscribe((data: Room[]) => this.rooms = data);
 		this.customersService.getAllCustomers()

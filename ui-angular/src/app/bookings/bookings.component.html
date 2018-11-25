@@ -1,4 +1,5 @@
-<div *ngIf="bookinginfo" class="alert alert-info" role="alert">
+<div *ngIf="bookinginfo" class="alert alert-info alert-dismissible" role="alert">
+<button type="button" class="close" (click)="bookinginfo = false;" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h2>Бронь {{bookingFull.bookingId}}</h2>
 	<div class="row">
 	<div class="col-xs-6">
@@ -20,7 +21,6 @@
         <p><b>Цена:</b> {{bookingFull.room.cost}}</p>
 	</div>
 	</div>
-        <p><a routerLink="/bookings" (click)="bookinginfo = false;" class="nav-link">Закрыть</a></p>
 </div>
 
 <div *ngIf="tableMode; else create">
@@ -51,7 +51,7 @@
     <tbody>
         <tr *ngFor="let b of bookings | paginate: { itemsPerPage: size, currentPage: page, totalItems: bookingsCount } | orderBy: 'number'">
             <ng-template [ngIf]="booking?.bookingId != b.bookingId" [ngIfElse]="edit">
-				<td class="col-md-2"><a [routerLink]="['/booking-with-nfo', b.bookingId]" (click)="getFullBookingInfo(b);" class="nav-link">{{b?.bookingId}}</a></td>
+				<td class="col-md-2"><a [routerLink]="['/bookings', b.bookingId]" (click)="getFullBookingInfo(b);" class="nav-link">{{b?.bookingId}}</a></td>
                 <td class="col-md-2">{{b?.room.number}}</td>
                 <td class="col-md-2">{{b?.customer.name}} {{b?.customer.surname}}</td>
                 <td class="col-md-2">	
@@ -87,16 +87,16 @@
 <!--шаблон для редактирования-->
 <ng-template #edit>
 	
-	<td class="col-md-2"><a [routerLink]="['bookings', booking.bookingId]" class="nav-link">{{booking?.bookingId}}</a></td>
+	<td class="col-md-2">{{booking?.bookingId}}</td>
 	
     <td class="col-md-2">		
-		<select [(ngModel)]="booking.roomId">
+		<select class="form-control" [(ngModel)]="booking.roomId">
 		<option *ngFor="let r of rooms" [ngValue]="r.roomId">{{r.number}}</option>
 		</select>
 		
     </td>
     <td class="col-md-2">
-        <select [(ngModel)]="booking.customerId">
+        <select class="form-control" [(ngModel)]="booking.customerId">
 		<option *ngFor="let c of customers" [ngValue]="c.customerId">{{c.name}} {{c.surname}}</option>
 		</select>
     </td>
@@ -124,7 +124,7 @@
     <div class="form-group">
         <label class="col-md-3">Номер комнаты</label>
 		<div class="col-md-3">
-		<select [(ngModel)]="booking.roomId">
+		<select class="form-control" [(ngModel)]="booking.roomId">
 		<option *ngFor="let r of rooms" [ngValue]="r.roomId">{{r.number}}</option>
 		</select>
 		</div>
@@ -132,7 +132,7 @@
     <div class="form-group">
         <label class="col-md-3">Гость</label>
 		<div class="col-md-3">
-        <select [(ngModel)]="booking.customerId">
+        <select class="form-control" [(ngModel)]="booking.customerId">
 		<option *ngFor="let c of customers" [ngValue]="c.customerId">{{c.name}} {{c.surname}}</option>
 		</select>
 		</div>
