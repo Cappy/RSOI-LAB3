@@ -12,7 +12,8 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'customers', component: CustomersComponent },
   { path: 'rooms', component: RoomsComponent },
-  { path: 'bookings', component: BookingsComponent }
+  { path: 'bookings', component: BookingsComponent },
+  { path: 'booking-with-info/:id', component: BookingsComponent }
 ];
 
 @NgModule({

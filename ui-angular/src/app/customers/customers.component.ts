@@ -5,10 +5,14 @@ import { HttpResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { ViewChild} from '@angular/core';
+import swal,{ SweetAlertOptions } from 'sweetalert2';
+import { SwalComponent } from '@toverux/ngx-sweetalert2';
+
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
-  styleUrls: ['./customers.component.css'],
+  styleUrls: ['./customers.component.scss'],
   providers: [CustomersService]
 })
 export class CustomersComponent implements OnInit {
@@ -19,6 +23,8 @@ export class CustomersComponent implements OnInit {
   tableMode: boolean = true;          // табличный режим
   page: number = 1;
   size: number = 10;
+  
+  @ViewChild('saveSwal') private saveSwal: SwalComponent;
 
   
   constructor(private customersService: CustomersService,
@@ -76,6 +82,8 @@ ngOnInit() {
                 .subscribe(data => this.loadCustomers());
         }
 		this.cancel();
+		
+		this.saveSwal.show();
 	}
  
     editCustomer(c: Customer) {

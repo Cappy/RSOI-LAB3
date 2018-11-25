@@ -18,6 +18,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { OrderModule } from 'ngx-order-pipe';
+
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     BookingsComponent
   ],
   imports: [
+	OrderModule,
     ReactiveFormsModule,
     SweetAlert2Module.forRoot(),
   	NgxPaginationModule,

@@ -6,9 +6,9 @@
 </p>
 
 <div class="form-horizontal">
-<div class="col-md-7"></div>
+<div class="col-md-6"></div>
 <label class="col-md-3">Количество записей на странице:</label>
-	<div class="col-md-1">
+	<div class="col-md-2">
 		<input onkeydown="if (event.keyCode == 8) event.preventDefault();" onkeypress="return event.charCode > 48;" class="form-control" [(ngModel)]="size" type="number" value="size" min="1" max="50">
 	</div>
 	<a class="btn btn-default btn-sm" (click)="loadCustomers()" role="button"><span class="glyphicon glyphicon glyphicon-ok"></span> Применить</a>
@@ -24,7 +24,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let c of customers | paginate: { itemsPerPage: size, currentPage: page, totalItems: customersCount }">
+        <tr *ngFor="let c of customers | paginate: { itemsPerPage: size, currentPage: page, totalItems: customersCount } | orderBy: 'name'">
             <ng-template [ngIf]="customer?.customerId != c.customerId" [ngIfElse]="edit">
                 <td class="col-md-2">{{c?.name}}</td>
                 <td class="col-md-2">{{c?.surname}}</td>
@@ -74,7 +74,7 @@
     </td>
     <td>
 		<!-- <input type="button"  [disabled]="name.invalid || surname.invalid || phonenumber.invalid" value="Сохранить" (click)="save()" class="btn btn-success btn-xs btn-space" /> -->
-		<button type="button"  [disabled]="name.invalid || surname.invalid || phonenumber.invalid" (click)="save()" class="btn btn-success btn-xs btn-space" aria-label="my button" style="border: 0px">
+		<button type="button"  [disabled]="name.invalid || surname.invalid || phonenumber.invalid" (click)="save();" class="btn btn-success btn-xs btn-space" aria-label="my button" style="border: 0px">
 		<span class="glyphicon glyphicon-ok" style="color:#ffffff; font-size: 12px;" aria-hidden="true"></span>
 		Сохранить
 		</button>
@@ -83,6 +83,12 @@
     </td>
 
 </ng-template>
+
+		<swal
+			#saveSwal
+			title = "Успешно"
+			type="success">						
+		</swal>
  
 <!--шаблон для добавления-->
 <ng-template #create>
@@ -123,7 +129,7 @@
 	<div class="form-group">
 		<div class="col-md-3"></div>
         <div class="col-md-3">
-            <input type="button"  [disabled]="name.invalid || surname.invalid || phonenumber.invalid" value="Сохранить" (click)="save()" class="btn btn-success" />
+            <input type="button"  [disabled]="name.invalid || surname.invalid || phonenumber.invalid" value="Сохранить" (click)="save(); saveSwal.show();" class="btn btn-success" />
         </div>
     </div>
 <!-- </form> -->
