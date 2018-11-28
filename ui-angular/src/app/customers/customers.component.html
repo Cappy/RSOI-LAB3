@@ -101,7 +101,7 @@
 	text = "{{errorMsg}}(Bugged!!!)"
 	type="error">
 <ng-container *swalPartial="swalTargets.text">
-{{errorMsg}}
+<div style="display: table; margin: 0 auto;">{{errorMsg}}</div>
 </ng-container>	
 </swal>  
  
@@ -144,7 +144,7 @@
 	<div class="form-group">
 		<div class="col-md-3"></div>
         <div class="col-md-3">
-            <input type="button"  [disabled]="name.invalid || surname.invalid || phonenumber.invalid" value="Сохранить" (click)="save(); saveSwal.show();" class="btn btn-success" />
+            <input type="button"  [disabled]="name.invalid || surname.invalid || phonenumber.invalid" value="Сохранить" (click)="save();" class="btn btn-success" />
         </div>
     </div>
 <!-- </form> -->

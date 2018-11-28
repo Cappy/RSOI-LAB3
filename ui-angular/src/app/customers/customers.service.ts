@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Customer } from './customer';
 import { ActivatedRoute } from '@angular/router';
+ 
+import { throwError, Observable } from 'rxjs'
+import { catchError } from 'rxjs/operators'﻿
  
 @Injectable()
 export class CustomersService {
@@ -18,11 +21,21 @@ export class CustomersService {
     }
 	
 	getAllCustomers() {
-        return this.http.get(this.url);
+        return this.http.get(this.url).pipe(
+        catchError((err: HttpErrorResponse) => {
+            console.log('Handling error...', err);
+            return throwError(err);
+        })
+		);
     }
  
     getCustomers(page: number, size: number) {
-        return this.http.get(this.url + '?page=' + page + '&size=' + size);
+        return this.http.get(this.url + '?page=' + page + '&size=' + size).pipe(
+        catchError((err: HttpErrorResponse) => {
+            console.log('Handling error...', err);
+            return throwError(err);
+        })
+		);
     }
  
     createCustomer(customer: Customer) {
@@ -33,6 +46,11 @@ export class CustomersService {
         return this.http.put(this.url + '/' + customer.customerId, customer, { observe: 'response', responseType: 'text' });
     }
     deleteCustomer(customerId: string) {
-        return this.http.delete(this.url + '/' + customerId);
+        return this.http.delete(this.url + '/' + customerId).pipe(
+        catchError((err: HttpErrorResponse) => {
+            console.log('Handling error...', err);
+            return throwError(err);
+        })
+		);
     }
 }

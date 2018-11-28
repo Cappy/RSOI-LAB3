@@ -58,13 +58,8 @@ ngOnInit() {
 
     // получаем данные через сервис
     loadCustomers() {	
-		//this.getCustomersCount();
-        this.customersService.getCustomers(this.page,this.size).pipe(
-        catchError((err: HttpErrorResponse) => {
-            console.log('Handling error locally and rethrowing it...', err);
-            return throwError(err);
-        })
-		).subscribe((data: Customer[]) => this.customers = data,
+		this.getCustomersCount();
+        this.customersService.getCustomers(this.page,this.size).subscribe((data: Customer[]) => this.customers = data,
 			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText + " (" + err.status + ")";
 			this.errorSwal.show();
 			});
@@ -77,7 +72,10 @@ ngOnInit() {
 	
 	getCustomersCount() {
         this.customersService.getAllCustomers()
-            .subscribe((data: Customer[]) => this.customersCount = data.length);
+            .subscribe((data: Customer[]) => this.customersCount = data.length,
+			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText + " (" + err.status + ")";
+			this.errorSwal.show();
+			});
     }
 	
     // сохранение данных
@@ -86,19 +84,35 @@ ngOnInit() {
 			
 			this.customersService.createCustomer(this.customer)
                 .subscribe((data: HttpResponse<Customer>) => {
-                    console.log(data);
 					this.loadCustomers();
+					if(data.body != null)
+					{
+						console.log(data);
+						this.saveSwal.show();
+					}
                     //this.customers.push(data.body);
-                });
+                },
+			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText + " (" + err.status + ")";
+			this.errorSwal.show();
+			});
             // this.customersservice.createcustomer(this.customer)
 				// .subscribe((data: customer) => this.customers.push(data));
         } else {
             this.customersService.updateCustomer(this.customer)
-                .subscribe(data => this.loadCustomers());
+                .subscribe(data => {
+					this.loadCustomers();
+					if(data.body != null)
+					{
+						console.log(data);
+						this.saveSwal.show();
+					}
+                    //this.customers.push(data.body);
+                },
+			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText + " (" + err.status + ")";
+			this.errorSwal.show();
+			});
         }
 		this.cancel();
-		
-		this.saveSwal.show();
 	}
  
     editCustomer(c: Customer) {
@@ -114,7 +128,10 @@ ngOnInit() {
     delete(c: Customer) {
 	  
 	  this.customersService.deleteCustomer(c.customerId)
-            .subscribe(data => this.loadCustomers());
+            .subscribe(data => { this.loadCustomers(); },
+			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText + " (" + err.status + ")";
+			this.errorSwal.show();
+			});
 	this.cancel();
     }
 	
