@@ -16,7 +16,7 @@
 	<a class="btn btn-default btn-sm" (click)="loadCustomers()" role="button"><span class="glyphicon glyphicon glyphicon-ok"></span> Применить</a>
 	</div>
 </div> 
-</div>   
+</div>
 
 <table *ngIf="tableMode; else create" class="table table-striped">
     <thead>
@@ -41,6 +41,8 @@
 						#deleteSwal
 						title = "Удалить гостя {{c?.surname}} {{c?.name}}?"
 						text="Это нельзя будет отменить."
+						confirmButtonText= "Да"
+						cancelButtonText = "Нет"
 						type="warning"
 						[showCancelButton]="true"
 						[focusCancel]="true"
@@ -93,6 +95,15 @@
 			title = "Успешно"
 			type="success">						
 		</swal>
+<swal
+	#errorSwal
+	title = "Ошибка"
+	text = "{{errorMsg}}(Bugged!!!)"
+	type="error">
+<ng-container *swalPartial="swalTargets.text">
+{{errorMsg}}
+</ng-container>	
+</swal>  
  
 <!--шаблон для добавления-->
 <ng-template #create>
@@ -143,4 +154,4 @@
 	</div>
 	
 </div>
-</ng-template>
+</ng-template> 

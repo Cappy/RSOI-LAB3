@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomersService } from './customers.service';
 import { Customer } from './customer';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ViewChild} from '@angular/core';
 import swal,{ SweetAlertOptions } from 'sweetalert2';
 import { SwalComponent } from '@toverux/ngx-sweetalert2';
+import { SwalPartialTargets } from '@toverux/ngx-sweetalert2';
+
+import { throwError, Observable } from 'rxjs'
+import { catchError } from 'rxjs/operators'﻿
 
 @Component({
   selector: 'app-customers',
@@ -19,17 +23,19 @@ export class CustomersComponent implements OnInit {
 
   customer: Customer = new Customer();   // изменяемый клиент
   customers: Customer[];                // массив клиентов
+  errorMsg;
   customersCount: number;
   tableMode: boolean = true;          // табличный режим
   page: number = 1;
   size: number = 10;
   
   @ViewChild('saveSwal') private saveSwal: SwalComponent;
-
+  @ViewChild('errorSwal') private errorSwal: SwalComponent;
+  
   
   constructor(private customersService: CustomersService,
   private route: ActivatedRoute, private router: Router,
-  private formBuilder: FormBuilder) 
+  private formBuilder: FormBuilder, public readonly swalTargets: SwalPartialTargets) 
   {
 	this.route.queryParams.subscribe(params => {
 		if (params['page']>0) {
@@ -49,11 +55,20 @@ ngOnInit() {
 		
     }
 
+
     // получаем данные через сервис
     loadCustomers() {	
-		this.getCustomersCount();
-        this.customersService.getCustomers(this.page,this.size)
-            .subscribe((data: Customer[]) => this.customers = data);
+		//this.getCustomersCount();
+        this.customersService.getCustomers(this.page,this.size).pipe(
+        catchError((err: HttpErrorResponse) => {
+            console.log('Handling error locally and rethrowing it...', err);
+            return throwError(err);
+        })
+		).subscribe((data: Customer[]) => this.customers = data,
+			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText + " (" + err.status + ")";
+			this.errorSwal.show();
+			});
+		
 		if (this.page > 0 && this.size > 0)
 		{
 		this.router.navigate(['/customers'], { queryParams: { page: this.page, size: this.size } });
