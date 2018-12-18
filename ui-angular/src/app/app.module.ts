@@ -21,6 +21,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { OrderModule } from 'ngx-order-pipe';
 
 
+////////
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
+import { AlertComponent } from './_directives';
+import { AuthGuard } from './_guards';
+import { JwtInterceptor, ErrorInterceptor } from './_helpers';
+import { AlertService, AuthenticationService, UserService } from './_services';
+import { AccountComponent } from './account';
+import { LoginComponent } from './login';
+import { RegisterComponent } from './register';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,9 +40,14 @@ import { OrderModule } from 'ngx-order-pipe';
     CustomersComponent,
     HomeComponent,
     RoomsComponent,
-    BookingsComponent
+    BookingsComponent,
+	AlertComponent,
+    AccountComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
+	ReactiveFormsModule,
 	OrderModule,
     ReactiveFormsModule,
     SweetAlert2Module.forRoot(),
@@ -42,6 +59,12 @@ import { OrderModule } from 'ngx-order-pipe';
 	FormsModule
   ],
   providers: [
+	AuthGuard,
+    AlertService,
+    AuthenticationService,
+    UserService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

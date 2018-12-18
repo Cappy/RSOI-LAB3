@@ -5,14 +5,27 @@ import { CustomersComponent } from './customers/customers.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { BookingsComponent } from './bookings/bookings.component';
 
+import { AccountComponent } from './account';
+import { LoginComponent } from './login';
+import { RegisterComponent } from './register';
+import { AuthGuard } from './_guards';
+
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'customers', component: CustomersComponent },
-  { path: 'rooms', component: RoomsComponent },
-  { path: 'bookings', component: BookingsComponent }
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard] },
+  { path: 'rooms', component: RoomsComponent, canActivate: [AuthGuard] },
+  { path: 'bookings', component: BookingsComponent, canActivate: [AuthGuard] },
+  
+  
+  { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent }//,
+
+  // otherwise redirect to home
+  //{ path: '**', redirectTo: '' }
 ];
 
 @NgModule({
