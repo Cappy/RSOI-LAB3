@@ -60,7 +60,7 @@ ngOnInit() {
     loadCustomers() {	
 		this.getCustomersCount();
         this.customersService.getCustomers(this.page,this.size).subscribe((data: Customer[]) => this.customers = data,
-			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText + " (" + err.status + ")";
+			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err + " (" + err.status + ")";
 			this.errorSwal.show();
 			});
 		
@@ -73,7 +73,7 @@ ngOnInit() {
 	getCustomersCount() {
         this.customersService.getAllCustomers()
             .subscribe((data: Customer[]) => this.customersCount = data.length,
-			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText + " (" + err.status + ")";
+			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err + " (" + err.status + ")";
 			this.errorSwal.show();
 			});
     }

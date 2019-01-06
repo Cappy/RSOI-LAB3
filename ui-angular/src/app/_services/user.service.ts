@@ -7,9 +7,9 @@ import { User } from '../_models';
 export class UserService {
     constructor(private http: HttpClient) { }
 
-    getAll() {
-        return this.http.get<User[]>(`/api/auth/`);
-    }
+    // getAll() {
+        // return this.http.get<User[]>(`/api/auth/`);
+    // }
 
     getById(id?: string) {
         return this.http.get(`/api/auth/` + id);

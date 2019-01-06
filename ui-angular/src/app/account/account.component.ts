@@ -17,24 +17,24 @@ export class AccountComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loadAllUsers();
+        //this.loadAllUsers();
     }
 
     deleteUser(id: string) {
         this.userService.delete(id).pipe(first()).subscribe(() => { 
-            this.loadAllUsers() 
+            //this.loadAllUsers() 
         });
     }
 	
-	getToken(currentUser: User) {
-		return this.http.post<Token>(`/api/auth/get-oauth2-token`, currentUser).subscribe(OAuth2Token => {
-			this.OAuth2Token = OAuth2Token.token;
-		});
-	}
+	// getToken(currentUser: User) {
+		// return this.http.post<Token>(`/api/auth/get-oauth2-token`, currentUser).subscribe(OAuth2Token => {
+			// this.OAuth2Token = OAuth2Token.token;
+		// });
+	// }
 
-    private loadAllUsers() {
-        this.userService.getAll().pipe(first()).subscribe(users => { 
-            this.users = users; 
-        });
-    }
+    // private loadAllUsers() {
+        // this.userService.getAll().pipe(first()).subscribe(users => { 
+            // this.users = users; 
+        // });
+    // }
 }

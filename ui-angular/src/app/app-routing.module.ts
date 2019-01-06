@@ -22,10 +22,10 @@ const routes: Routes = [
   
   { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent }//,
+  { path: 'register', component: RegisterComponent },
 
   // otherwise redirect to home
-  //{ path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
