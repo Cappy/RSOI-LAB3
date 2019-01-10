@@ -18,6 +18,7 @@ const routes: Routes = [
   { path: 'customers', component: CustomersComponent, canActivate: [AuthGuard] },
   { path: 'rooms', component: RoomsComponent, canActivate: [AuthGuard] },
   { path: 'bookings', component: BookingsComponent, canActivate: [AuthGuard] },
+  //{ path: 'booking', component: BookingsComponent, canActivate: [AuthGuard] },
   
   
   { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
@@ -25,7 +26,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
 
   // otherwise redirect to home
-  { path: '**', redirectTo: '' }
+  //{ path: '**', redirectTo: '' }
 ];
 
 @NgModule({
