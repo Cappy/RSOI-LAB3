@@ -60,7 +60,8 @@ ngOnInit() {
     loadCustomers() {	
 		this.getCustomersCount();
         this.customersService.getCustomers(this.page,this.size).subscribe((data: Customer[]) => this.customers = data,
-			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err + " (" + err.status + ")";
+			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText +
+			" (" + err.status + ")" +"\n" + err.message;
 			this.errorSwal.show();
 			});
 		
@@ -128,7 +129,9 @@ ngOnInit() {
     delete(c: Customer) {
 	  
 	  this.customersService.deleteCustomer(c.customerId)
-            .subscribe(data => { this.loadCustomers(); },
+            .subscribe(data => { this.loadCustomers(); 
+			this.saveSwal.show();
+			},
 			(err: HttpErrorResponse) => { this.errorMsg = "Ошибка: " + err.statusText + " (" + err.status + ")";
 			this.errorSwal.show();
 			});

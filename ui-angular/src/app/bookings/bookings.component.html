@@ -123,6 +123,15 @@
 			title = "Успешно"
 			type="success">						
 		</swal>
+<swal
+	#errorSwal
+	title = "Ошибка"
+	text = "{{errorMsg}}"
+	type="error">
+<ng-container *swalPartial="swalTargets.text">
+<div style="display: table; margin: 0 auto;">{{errorMsg}}</div>
+</ng-container>	
+</swal>  
  
 <!--шаблон для добавления-->
 <ng-template #create>

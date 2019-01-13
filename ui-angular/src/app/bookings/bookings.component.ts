@@ -10,13 +10,14 @@ import { Room } from './../rooms/room';
 import { Booking } from './booking';
 import { BookingFull } from './bookingFull';
 
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ViewChild} from '@angular/core';
 import swal,{ SweetAlertOptions } from 'sweetalert2';
 import { SwalComponent } from '@toverux/ngx-sweetalert2';
+import { SwalPartialTargets } from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-bookings',
@@ -29,6 +30,7 @@ export class BookingsComponent implements OnInit {
   booking: Booking = new Booking();  
   bookings: Booking[];                
   
+  errorMsg;
   customer: Customer = new Customer();   
   customers: Customer[]; 
   
@@ -45,12 +47,13 @@ export class BookingsComponent implements OnInit {
   size: number = 10;
 
   @ViewChild('saveSwal') private saveSwal: SwalComponent;
+  @ViewChild('errorSwal') private errorSwal: SwalComponent;
   
   constructor(private bookingsService: BookingsService,
   private customersService: CustomersService,
   private roomsService: RoomsService,
   private route: ActivatedRoute, private router: Router,
-  private formBuilder: FormBuilder) 
+  private formBuilder: FormBuilder, public readonly swalTargets: SwalPartialTargets) 
   {
 	this.route.queryParams.subscribe(params => {
 		if (params['page']>0) {
@@ -71,7 +74,11 @@ ngOnInit() {
     loadBookings() {	
 		this.getBookingsCount();
         this.bookingsService.getBookings(this.page,this.size)
-            .subscribe((data: Booking[]) => this.bookings = data);
+            .subscribe((data: Booking[]) => this.bookings = data,
+			(err: any) => { 
+			this.errorMsg = "Ошибка: " + err.error.err;
+			this.errorSwal.show();
+			});
 			
 		if (this.page > 0 && this.size > 0)
 		{

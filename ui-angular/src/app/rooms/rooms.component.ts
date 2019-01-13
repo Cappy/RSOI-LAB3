@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ViewChild} from '@angular/core';
 import swal,{ SweetAlertOptions } from 'sweetalert2';
 import { SwalComponent } from '@toverux/ngx-sweetalert2';
+import { SwalPartialTargets } from '@toverux/ngx-sweetalert2';
 
 @Component({
   selector: 'app-rooms',
@@ -17,18 +18,20 @@ import { SwalComponent } from '@toverux/ngx-sweetalert2';
 })
 export class RoomsComponent implements OnInit {
 
-  room: Room = new Room();   // изменяемый клиент
-  rooms: Room[];                // массив клиентов
+  room: Room = new Room();   // изменяемая комната
+  rooms: Room[];                // массив комнат
+  errorMsg;
   roomsCount: number;
   tableMode: boolean = true;          // табличный режим
   page: number = 1;
   size: number = 10;
 
   @ViewChild('saveSwal') private saveSwal: SwalComponent;
+  @ViewChild('errorSwal') private errorSwal: SwalComponent;
   
   constructor(private roomsService: RoomsService,
   private route: ActivatedRoute, private router: Router,
-  private formBuilder: FormBuilder) 
+  private formBuilder: FormBuilder, public readonly swalTargets: SwalPartialTargets)  
   {
 	this.route.queryParams.subscribe(params => {
 		if (params['page']>0) {
@@ -70,19 +73,30 @@ ngOnInit() {
 			
 			this.roomsService.createRoom(this.room)
                 .subscribe((data: HttpResponse<Room>) => {
-                    console.log(data);
 					this.loadRooms();
+					this.saveSwal.show();
                     //this.rooms.push(data.body);
-                });
+                },
+				(err) => { 
+				this.errorMsg = "Ошибка: " + err.error.err;
+				this.errorSwal.show();
+			});
             // this.roomsservice.createroom(this.room)
 				// .subscribe((data: room) => this.rooms.push(data));
         } else {
             this.roomsService.updateRoom(this.room)
-                .subscribe(data => this.loadRooms());
+                .subscribe(data => {
+					this.loadRooms();
+					this.saveSwal.show();
+					},
+				(err) => { 
+				this.errorMsg = "Ошибка: " + err.error.err;
+				this.errorSwal.show();
+			});
         }
 		this.cancel();
+		this.loadRooms();
 		
-		this.saveSwal.show();
 	}
  
     editRoom(c: Room) {
@@ -98,7 +112,12 @@ ngOnInit() {
     delete(c: Room) {
 	  
 	  this.roomsService.deleteRoom(c.roomId)
-            .subscribe(data => this.loadRooms());
+            .subscribe(data => this.loadRooms(),
+			(err: any) => { 
+			this.errorMsg = "Ошибка: " + err.error.err;
+			this.errorSwal.show();
+			});
+			
 	this.cancel();
     }
 	
